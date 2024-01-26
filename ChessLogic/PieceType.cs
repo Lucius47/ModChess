@@ -7,6 +7,9 @@
         Knight,
         Rook,
         Queen,
-        King
+        King,
+        
+        RomanBishop,
+        Tank
     }
 }

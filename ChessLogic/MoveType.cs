@@ -7,6 +7,8 @@
         CastleQS,
         DoublePawn,
         EnPassant,
-        PawnPromotion
+        PawnPromotion,
+        
+        RangedMove
     }
 }

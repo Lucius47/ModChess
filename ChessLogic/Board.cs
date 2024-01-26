@@ -51,21 +51,105 @@
         private void AddStartPieces()
         {
             this[0, 0] = new Rook(Player.Black);
-            this[0, 1] = new Knight(Player.Black);
-            this[0, 2] = new Bishop(Player.Black);
+            
+            if (blackCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[0, 1] = new RomanBishop(Player.Black);
+            }
+            else if (blackCiv == Civilizations.Italy)
+            {
+                this[0, 1] = new Tank(Player.Black);
+            }
+            else
+            {
+                this[0, 1] = new Knight(Player.Black);
+            }
+            
+            if (blackCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[0, 2] = new RomanBishop(Player.Black);
+            }
+            else
+            {
+                this[0, 2] = new Bishop(Player.Black);
+            }
+
             this[0, 3] = new Queen(Player.Black);
             this[0, 4] = new King(Player.Black);
-            this[0, 5] = new Bishop(Player.Black);
-            this[0, 6] = new Knight(Player.Black);
+            
+            if (blackCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[0, 5] = new RomanBishop(Player.Black);
+            }
+            else
+            {
+                this[0, 5] = new Bishop(Player.Black);
+            }
+
+            if (blackCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[0, 6] = new RomanBishop(Player.Black);
+            }
+            else if (blackCiv == Civilizations.Italy)
+            {
+                this[0, 6] = new Tank(Player.Black);
+            }
+            else
+            {
+                this[0, 6] = new Knight(Player.Black);
+            }
+            
             this[0, 7] = new Rook(Player.Black);
 
             this[7, 0] = new Rook(Player.White);
-            this[7, 1] = new Knight(Player.White);
-            this[7, 2] = new Bishop(Player.White);
+            
+            if (whiteCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[7, 1] = new RomanBishop(Player.White);
+            }
+            else if (whiteCiv == Civilizations.Italy)
+            {
+                this[7, 1] = new Tank(Player.White);
+            }
+            else
+            {
+                this[7, 1] = new Knight(Player.White);
+            }
+            
+            if (whiteCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[7, 2] = new RomanBishop(Player.White);
+            }
+            else
+            {
+                this[7, 2] = new Bishop(Player.White);
+            }
+
             this[7, 3] = new Queen(Player.White);
             this[7, 4] = new King(Player.White);
-            this[7, 5] = new Bishop(Player.White);
-            this[7, 6] = new Knight(Player.White);
+
+            if (whiteCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[7, 5] = new RomanBishop(Player.White);
+            }
+            else
+            {
+                this[7, 5] = new Bishop(Player.White);
+            }
+
+            if (whiteCiv == Civilizations.HolyRomanEmpire)
+            {
+                this[7, 6] = new RomanBishop(Player.White);
+            }
+            else if (whiteCiv == Civilizations.Italy)
+            {
+                this[7, 6] = new Tank(Player.White);
+            }
+            else
+            {
+                this[7, 6] = new Knight(Player.White);
+            }
+            
             this[7, 7] = new Rook(Player.White);
 
             for (int c = 0; c < 8; c++)
@@ -75,11 +159,17 @@
 
                 if (whiteCiv == Civilizations.China)
                 {
-                    this[5, c] = new Pawn(Player.White);
+                    if (c is not (0 or 1 or 6 or 7))
+                    {
+                        this[5, c] = new Pawn(Player.White);
+                    }
                 }
                 if (blackCiv == Civilizations.China)
                 {
-                    this[2, c] = new Pawn(Player.Black);
+                    if (c is not (0 or 1 or 6 or 7))
+                    {
+                        this[2, c] = new Pawn(Player.Black);
+                    }
                 }
             }
         }
@@ -279,7 +369,7 @@
                 // positions from where a pawn can move to the en passant square
                 Player.White => new Position[] { skipPos + Direction.SouthWest, skipPos + Direction.SouthEast },
                 Player.Black => new Position[] { skipPos + Direction.NorthWest, skipPos + Direction.NorthEast },
-                _ => [] // Array.Empty<Position>()
+                _ => Array.Empty<Position>()
             };
 
             return HasPawnInPosition(player, pawnPositions, skipPos);
