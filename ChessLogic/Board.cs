@@ -118,5 +118,157 @@
 
             return copy;
         }
+
+        public Counting CountPieces() // doesn't have to be public. But might be useful when computer controlled players are added
+        {
+            Counting counting = new Counting();
+
+            foreach (Position pos in PiecePositions())
+            {
+                Piece piece = this[pos];
+                counting.Increment(piece.Color, piece.Type);
+            }
+
+            return counting;
+        }
+
+        public bool InsufficientMaterial()
+        {
+            Counting counting = CountPieces();
+
+            return IsKingVKing(counting) || IsKingBishopVKing(counting) || 
+                IsKingKnightVKing(counting) || IsKingBishopVKingBishop(counting);
+        }
+
+        private static bool IsKingVKing(Counting counting)
+        {
+            // if there are only 2 pieces, they must both be kings
+            return counting.TotalCount == 2;
+        }
+
+        private static bool IsKingBishopVKing(Counting counting)
+        {
+            // if there are 3 pieces and one of them is a black or white bishop.
+            return counting.TotalCount == 3 && (counting.White(PieceType.Bishop) == 1 || counting.Black(PieceType.Bishop) == 1);
+        }
+
+        private static bool IsKingKnightVKing(Counting counting)
+        {
+            // if there are 3 pieces and one of them is a black or white knight.
+            return counting.TotalCount == 3 && (counting.White(PieceType.Knight) == 1 || counting.Black(PieceType.Knight) == 1);
+        }
+
+        private bool IsKingBishopVKingBishop(Counting counting)
+        {
+            // insufficient if both bishops are on the same color square
+            if (counting.TotalCount != 4)
+            {
+                return false;
+            }
+
+            if (counting.White(PieceType.Bishop) != 1 || counting.Black(PieceType.Bishop) != 1)
+            {
+                return false;
+            }
+
+            // there are two bishops and two kings
+
+            // check if bishops are on the squares of same color.
+            Position wBishopPos = FindPiece(Player.White, PieceType.Bishop);
+            Position bBishopPos = FindPiece(Player.Black, PieceType.Bishop);
+
+            return wBishopPos.SquareColor() == bBishopPos.SquareColor();
+        }
+
+        private Position FindPiece(Player color, PieceType type)
+        {
+            // return first piece of color and type found
+            return PiecePositionsFor(color).First(pos => this[pos].Type == type);
+        }
+
+
+        // threefold repetition rule
+        private bool IsUnmovedKingAndRook(Position kingPos, Position rookPos)
+        {
+            if (IsEmpty(kingPos) || IsEmpty(rookPos))
+            {
+                // one of the pieces have moved.
+                return false;
+            }
+
+            Piece king = this[kingPos];
+            Piece rook = this[rookPos];
+
+            return king.Type == PieceType.King && rook.Type == PieceType.Rook // if indeed the king and rook are there (no need for it though)
+                && !king.HasMoved && !rook.HasMoved; // and none of them have moved.
+        }
+
+        public bool CastleRightsKS(Player player)
+        {
+            return player switch
+            {
+                Player.White => IsUnmovedKingAndRook(new Position(7, 4), new Position(7, 7)), // start positions of king and rook
+                Player.Black => IsUnmovedKingAndRook(new Position(0, 4), new Position(0, 7)),
+                _ => false
+            };
+        }
+
+        public bool CastleRightsQS(Player player)
+        {
+            return player switch
+            {
+                Player.White => IsUnmovedKingAndRook(new Position(7, 4), new Position(7, 0)),
+                Player.Black => IsUnmovedKingAndRook(new Position(0, 4), new Position(0, 0)),
+                _ => false
+            };
+        }
+
+        private bool HasPawnInPosition(Player player, Position[] pawnPositions, Position skipPos)
+        {
+            // if the given player has a pawn which can move to skipPos.
+            foreach (Position pos in pawnPositions.Where(IsInside)) // if pos is inside the board
+            {
+                Piece piece = this[pos];
+                if (piece == null || piece.Color != player || piece.Type != PieceType.Pawn)
+                {
+                    continue;
+                }
+
+                // there is a pawn with the correct color and position to capture the skipPos
+
+                // check if that move doesn't leave the king in check.
+                EnPassant move = new EnPassant(pos, skipPos);
+                if (move.IsLegal(this))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool CanCaptureEnPassant(Player player)
+        {
+            Position skipPos = GetPawnSkipPosition(player.Opponent()); // en passant target square
+
+            if (skipPos == null)
+            {
+                // the opponent did not move a pawn two squares in the previous move
+                return false;
+            }
+
+            // do we have a pawn that can capture en passant
+            Position[] pawnPositions = player switch
+            {
+                // positions from where a pawn can move to the en passant square
+                Player.White => new Position[] { skipPos + Direction.SouthWest, skipPos + Direction.SouthEast },
+                Player.Black => new Position[] { skipPos + Direction.NorthWest, skipPos + Direction.NorthEast },
+                _ => [] // Array.Empty<Position>()
+            };
+
+            return HasPawnInPosition(player, pawnPositions, skipPos);
+        }
+
+        // end threefold repetition rule
     }
 }

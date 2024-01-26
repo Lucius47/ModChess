@@ -6,7 +6,7 @@
         public abstract Position FromPos { get; }
         public abstract Position ToPos { get; }
 
-        public abstract void Execute(Board board);
+        public abstract bool Execute(Board board); // true if a piece was captured, or a pawn was moved. (for the 50move rule)
 
         public virtual bool IsLegal(Board board) // true if executing this move doesn't put the current player in check
         {
@@ -18,7 +18,7 @@
             Execute(boardCopy); // and execute the move on the copy
             return !boardCopy.IsInCheck(player); // return true if the player's king is not in check after the move.
 
-            // note: this code is not very efficient, so it shoudn't be used when an AI is calculating moves
+            // note: this code is not very efficient, so it shouldn't be used when an AI is calculating moves
 
             // note: this method is virtual because some moves (like castling) need to override it
         }

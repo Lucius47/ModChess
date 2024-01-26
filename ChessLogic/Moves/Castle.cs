@@ -31,11 +31,13 @@
             }
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             // move king and rook
             new NormalMove(FromPos, ToPos).Execute(board);
             new NormalMove(rookFromPos, rookToPos).Execute(board);
+
+            return false; // for the 50move rule. castling never moves a pawn or captures a piece.
         }
 
         public override bool IsLegal(Board board)

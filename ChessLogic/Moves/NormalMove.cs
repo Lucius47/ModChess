@@ -12,12 +12,15 @@
             ToPos = toPos;
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             Piece piece = board[FromPos];
+            bool capture = !board.IsEmpty(ToPos); // captures if the ToPos is not empty.
             board[ToPos] = piece;
             board[FromPos] = null;
             piece.HasMoved = true;
+
+            return capture || piece.Type == PieceType.Pawn; // for the 50move rule. if it's a capture move or a pawn is moved
         }
     }
 }

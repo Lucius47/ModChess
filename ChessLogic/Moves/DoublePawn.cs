@@ -16,11 +16,13 @@
             skippedPosition = new Position((from.Row + to.Row) / 2, from.Column); // square btw from and to
         }
 
-        public override void Execute(Board board)
+        public override bool Execute(Board board)
         {
             Player player = board[FromPos].Color;
             board.SetPawnSkipPosition(player, skippedPosition);
             new NormalMove(FromPos, ToPos).Execute(board);
+
+            return true; // for the 50move rule. always moves a pawn.
         }
     }
 }
