@@ -4,6 +4,9 @@
     {
         private readonly Piece[,] pieces = new Piece[8, 8];
 
+        private static Civilizations whiteCiv = Civilizations.Default;
+        private static Civilizations blackCiv = Civilizations.Default;
+
         private readonly Dictionary<Player, Position> pawnSkipPositions = new() // en passant squares
         {
             { Player.White, null },
@@ -34,9 +37,13 @@
         }
         // end en passant
 
-        public static Board Initial()
+        public static Board Initial(Civilizations _whiteCiv = Civilizations.Default, Civilizations _blackCiv = Civilizations.Default)
         {
             Board board = new Board();
+
+            whiteCiv = _whiteCiv;
+            blackCiv = _blackCiv;
+
             board.AddStartPieces();
             return board;
         }
@@ -65,6 +72,15 @@
             {
                 this[1, c] = new Pawn(Player.Black);
                 this[6, c] = new Pawn(Player.White);
+
+                if (whiteCiv == Civilizations.China)
+                {
+                    this[5, c] = new Pawn(Player.White);
+                }
+                if (blackCiv == Civilizations.China)
+                {
+                    this[2, c] = new Pawn(Player.Black);
+                }
             }
         }
 
