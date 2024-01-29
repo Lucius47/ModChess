@@ -240,9 +240,34 @@ namespace ChessUI
 
             HideHighlights();
             moveCache.Clear();
-            gameState = new GameState(Player.White, Board.Initial());
-            DrawBoard(gameState.Board);
-            SetCursor(gameState.CurrentPlayer);
+            
+            MainMenu mainMenu = new MainMenu();
+            MenuContainer.Content = mainMenu;
+
+            foreach (var civ in Enum.GetValues(typeof(Civilizations)))
+            {
+                mainMenu.Player1Selection.Items.Add(civ.ToString());
+                mainMenu.Player2Selection.Items.Add(civ.ToString());
+            }
+
+            mainMenu.OptionSelected += option =>
+            {
+                MenuContainer.Content = null;
+                
+                if (option == Option.Exit)
+                {
+                    Application.Current.Shutdown();
+                }
+                else if (option == Option.Restart)
+                {
+                    gameState = new GameState(Player.White, Board.Initial(
+                        (Civilizations)mainMenu.Player1Selection.SelectedIndex,
+                        (Civilizations)mainMenu.Player2Selection.SelectedIndex
+                    ));
+                    DrawBoard(gameState.Board);
+                    SetCursor(gameState.CurrentPlayer);
+                }
+            };
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)

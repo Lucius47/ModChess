@@ -45,19 +45,47 @@ namespace ChessLogic
                 }
             }
         }
+        
+        private IEnumerable<Position> RangedPositions(Position from, Board board)
+        {
+            foreach (Direction dir in dirs)
+            {
+                if (dir == Direction.NorthWest || dir == Direction.NorthEast
+                                               || dir == Direction.SouthWest || dir == Direction.SouthEast)
+                {
+                    continue;
+                }
+                
+                Position to = from + (2 * dir);
+
+                if (!Board.IsInside(to)) // square is outside the board
+                {
+                    continue;
+                }
+
+                Position midPos = from + dir;
+                if (!board.IsEmpty(midPos)) // can't shoot over pieces
+                {
+                    continue;
+                }
+
+                if (!board.IsEmpty(to) && board[to].Color != Color) // square is occupied by an enemy piece
+                {
+                    yield return to;
+                }
+            }
+        }
 
         public override IEnumerable<Move> GetMoves(Position from, Board board)
         {
             foreach (Position to in MovePositions(from, board))
             {
-                if (board.IsEmpty(to))
-                {
-                    yield return new NormalMove(from, to);
-                }
-                else
-                {
-                    yield return new RangedMove(from, to);
-                }
+                yield return new NormalMove(from, to);
+            }
+
+            foreach (Position to in RangedPositions(from, board))
+            {
+                yield return new RangedMove(from, to);
             }
         }
     }

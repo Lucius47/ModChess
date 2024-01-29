@@ -48,6 +48,10 @@
     <Resource Include="Assets\QueenW.png" />
     <Resource Include="Assets\RookB.png" />
     <Resource Include="Assets\RookW.png" />
+    <None Remove="Assets\tankB.png" />
+    <Resource Include="Assets\tankB.png" />
+    <None Remove="Assets\tankW.png" />
+    <Resource Include="Assets\tankW.png" />
   </ItemGroup>
 
 </Project>
