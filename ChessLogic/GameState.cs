@@ -5,6 +5,9 @@
         public Board Board { get; }
         public Player CurrentPlayer { get; private set; }
         public Result Result { get; private set; } = null;
+
+        public bool isWhiteAIPlayer = false;
+        public bool isBlackAIPlayer = false;
         
         public int noCaptureOrPawnMoves = 0; // Counter to keep track of the moves for the 50move rule.
         private string stateString;

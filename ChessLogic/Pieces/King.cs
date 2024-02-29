@@ -2,6 +2,12 @@
 {
     public class King : Piece
     {
+        // mod
+        public bool IsRomanKing { get; set; } = false;
+        public bool IsEgyptianKing { get; set; } = false;
+        // mod
+
+
         public override PieceType Type => PieceType.King;
 
         public override Player Color { get; }
@@ -86,6 +92,29 @@
                 if (board.IsEmpty(to) || board[to].Color != Color) // square is empty or occupied by an enemy piece
                 {
                     yield return to;
+                }
+
+                if (IsRomanKing) // for Roman King
+                {
+                    // Your king can move 1 extra space in the up/down/left/right direction(s)
+                    if (board.IsEmpty(to) && (board.IsEmpty(to + dir) || board[to + dir].Color != Color))
+                    {
+                        if (dir == Direction.North || dir == Direction.South || dir == Direction.East || dir == Direction.West)
+                        {
+                            yield return to + dir;
+                        }
+                    }
+                }
+
+                if (IsEgyptianKing) // for Egyptian King
+                {
+                    if (dir == Direction.NorthWest || dir == Direction.SouthWest || dir == Direction.NorthEast || dir == Direction.SouthEast)
+                    {
+                        if (board.IsEmpty(to) && (board.IsEmpty(to + dir) || board[to + dir].Color != Color))
+                        {
+                            yield return to + dir;
+                        }
+                    }
                 }
             }
         }

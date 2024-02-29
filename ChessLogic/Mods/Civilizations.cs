@@ -5,6 +5,10 @@
         Default,
         HolyRomanEmpire,
         China,
-        Italy
+        Italy,
+        Huns,
+        Vikings,
+        Britons,
+        Egypt
     }
 }

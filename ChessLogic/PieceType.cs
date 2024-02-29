@@ -10,6 +10,9 @@
         King,
         
         RomanBishop,
-        Tank
+        Tank,
+        Horseman,
+        VikingPawn,
+        BritonPawn
     }
 }

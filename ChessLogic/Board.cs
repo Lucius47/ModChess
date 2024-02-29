@@ -50,127 +50,256 @@
 
         private void AddStartPieces()
         {
-            this[0, 0] = new Rook(Player.Black);
-            
-            if (blackCiv == Civilizations.HolyRomanEmpire)
+            switch (whiteCiv)
             {
-                this[0, 1] = new RomanBishop(Player.Black);
-            }
-            else if (blackCiv == Civilizations.Italy)
-            {
-                this[0, 1] = new Tank(Player.Black);
-            }
-            else
-            {
-                this[0, 1] = new Knight(Player.Black);
-            }
-            
-            if (blackCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[0, 2] = new RomanBishop(Player.Black);
-            }
-            else
-            {
-                this[0, 2] = new Bishop(Player.Black);
-            }
-
-            this[0, 3] = new Queen(Player.Black);
-            this[0, 4] = new King(Player.Black);
-            
-            if (blackCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[0, 5] = new RomanBishop(Player.Black);
-            }
-            else
-            {
-                this[0, 5] = new Bishop(Player.Black);
+                case Civilizations.Default:
+                    AddDefaultStartPieces(Player.White);
+                    break;
+                case Civilizations.HolyRomanEmpire:
+                    AddRomanStartPieces(Player.White);
+                    break;
+                case Civilizations.China:
+                    AddChineseStartPieces(Player.White);
+                    break;
+                case Civilizations.Italy:
+                    AddItalianStartPieces(Player.White);
+                    break;
+                case Civilizations.Huns:
+                    AddHunsStartPieces(Player.White);
+                    break;
+                case Civilizations.Vikings:
+                    AddVikingStartPieces(Player.White);
+                    break;
+                case Civilizations.Britons:
+                    AddBritonStartPieces(Player.White);
+                    break;
+                case Civilizations.Egypt:
+                    AddEgyptStartPieces(Player.White);
+                    break;
+                default:
+                    AddDefaultStartPieces(Player.White);
+                    break;
             }
 
-            if (blackCiv == Civilizations.HolyRomanEmpire)
+            switch (blackCiv)
             {
-                this[0, 6] = new RomanBishop(Player.Black);
+                case Civilizations.Default:
+                    AddDefaultStartPieces(Player.Black);
+                    break;
+                case Civilizations.HolyRomanEmpire:
+                    AddRomanStartPieces(Player.Black);
+                    break;
+                case Civilizations.China:
+                    AddChineseStartPieces(Player.Black);
+                    break;
+                case Civilizations.Italy:
+                    AddItalianStartPieces(Player.Black);
+                    break;
+                case Civilizations.Huns:
+                    AddHunsStartPieces(Player.Black);
+                    break;
+                case Civilizations.Vikings:
+                    AddVikingStartPieces(Player.Black);
+                    break;
+                case Civilizations.Britons:
+                    AddBritonStartPieces(Player.Black);
+                    break;
+                case Civilizations.Egypt:
+                    AddEgyptStartPieces(Player.Black);
+                    break;
+                default:
+                    AddDefaultStartPieces(Player.Black);
+                    break;
             }
-            else if (blackCiv == Civilizations.Italy)
-            {
-                this[0, 6] = new Tank(Player.Black);
-            }
-            else
-            {
-                this[0, 6] = new Knight(Player.Black);
-            }
-            
-            this[0, 7] = new Rook(Player.Black);
+        }
 
-            this[7, 0] = new Rook(Player.White);
-            
-            if (whiteCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[7, 1] = new RomanBishop(Player.White);
-            }
-            else if (whiteCiv == Civilizations.Italy)
-            {
-                this[7, 1] = new Tank(Player.White);
-            }
-            else
-            {
-                this[7, 1] = new Knight(Player.White);
-            }
-            
-            if (whiteCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[7, 2] = new RomanBishop(Player.White);
-            }
-            else
-            {
-                this[7, 2] = new Bishop(Player.White);
-            }
+        private void AddDefaultStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
 
-            this[7, 3] = new Queen(Player.White);
-            this[7, 4] = new King(Player.White);
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Knight(color);
+            this[row, 2] = new Bishop(color);
 
-            if (whiteCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[7, 5] = new RomanBishop(Player.White);
-            }
-            else
-            {
-                this[7, 5] = new Bishop(Player.White);
-            }
+            this[row, 3] = new Queen(color);
+            this[row, 4] = new King(color);
 
-            if (whiteCiv == Civilizations.HolyRomanEmpire)
-            {
-                this[7, 6] = new RomanBishop(Player.White);
-            }
-            else if (whiteCiv == Civilizations.Italy)
-            {
-                this[7, 6] = new Tank(Player.White);
-            }
-            else
-            {
-                this[7, 6] = new Knight(Player.White);
-            }
-            
-            this[7, 7] = new Rook(Player.White);
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Knight(color);
+            this[row, 7] = new Rook(color);
 
             for (int c = 0; c < 8; c++)
             {
-                this[1, c] = new Pawn(Player.Black);
-                this[6, c] = new Pawn(Player.White);
+                this[pawnRow, c] = new Pawn(color);
+            }
+        }
 
-                if (whiteCiv == Civilizations.China)
+        private void AddRomanStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new RomanBishop(color);
+            this[row, 2] = new RomanBishop(color);
+
+            this[row, 3] = new Queen(color);
+            var king = new King(color)
+            {
+                IsRomanKing = true
+            };
+            this[row, 4] = king;
+
+            this[row, 5] = new RomanBishop(color);
+            this[row, 6] = new RomanBishop(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new Pawn(color);
+            }
+        }
+
+        private void AddChineseStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+            var thirdRow = color == Player.White ? 5 : 2;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Knight(color);
+            this[row, 2] = new Bishop(color);
+
+            this[row, 3] = new Queen(color);
+            this[row, 4] = new King(color);
+
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Knight(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new Pawn(color);
+
+                if (c is not (0 or 1 or 6 or 7))
                 {
-                    if (c is not (0 or 1 or 6 or 7))
-                    {
-                        this[5, c] = new Pawn(Player.White);
-                    }
+                    this[thirdRow, c] = new Pawn(color);
                 }
-                if (blackCiv == Civilizations.China)
-                {
-                    if (c is not (0 or 1 or 6 or 7))
-                    {
-                        this[2, c] = new Pawn(Player.Black);
-                    }
-                }
+            }
+        }
+
+        private void AddItalianStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Tank(color);
+            this[row, 2] = new Bishop(color);
+
+            this[row, 3] = new Queen(color);
+            this[row, 4] = new King(color);
+
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Tank(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new Pawn(color);
+            }
+        }
+
+        private void AddHunsStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Horseman(color);
+            this[row, 2] = new Horseman(color);
+
+            this[row, 3] = new Horseman(color);
+            this[row, 4] = new King(color);
+
+            this[row, 5] = new Horseman(color);
+            this[row, 6] = new Horseman(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new Horseman(color);
+            }
+        }
+
+        private void AddVikingStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Knight(color);
+            this[row, 2] = new Bishop(color);
+
+            this[row, 3] = new Queen(color);
+            this[row, 4] = new King(color);
+
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Knight(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new VikingPawn(color);
+            }
+        }
+
+        private void AddBritonStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Knight(color);
+            this[row, 2] = new Bishop(color);
+
+            this[row, 3] = new Queen(color);
+            this[row, 4] = new King(color);
+
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Knight(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new BritonPawn(color);
+            }
+        }
+
+        private void AddEgyptStartPieces(Player color)
+        {
+            var row = color == Player.White ? 7 : 0;
+            var pawnRow = color == Player.White ? 6 : 1;
+
+            this[row, 0] = new Rook(color);
+            this[row, 1] = new Bishop(color);
+            this[row, 2] = new Bishop(color);
+
+            this[row, 3] = new Bishop(color);
+            var king = new King(color)
+            {
+                IsEgyptianKing = true
+            };
+            this[row, 4] = king;
+
+            this[row, 5] = new Bishop(color);
+            this[row, 6] = new Bishop(color);
+            this[row, 7] = new Rook(color);
+
+            for (int c = 0; c < 8; c++)
+            {
+                this[pawnRow, c] = new Pawn(color);
             }
         }
 

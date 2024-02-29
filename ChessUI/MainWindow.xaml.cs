@@ -48,6 +48,11 @@ namespace ChessUI
                         ));
                     DrawBoard(gameState.Board);
                     SetCursor(gameState.CurrentPlayer);
+
+                    if (gameState.isWhiteAIPlayer)
+                    {
+                        HandleAIMove();
+                    }
                 }
             };
         }
@@ -167,6 +172,15 @@ namespace ChessUI
             if (gameState.IsGameOver())
             {
                 ShowGameOver();
+            }
+
+            if (gameState.CurrentPlayer == Player.Black && gameState.isBlackAIPlayer)
+            {
+                HandleAIMove();
+            }
+            else if (gameState.CurrentPlayer == Player.White && gameState.isWhiteAIPlayer)
+            {
+                HandleAIMove();
             }
         }
 
@@ -297,7 +311,33 @@ namespace ChessUI
         // AI
         private void HandleAIMove()
         {
+            HandleAIMove:
+            // get a random position on the board that contains a piece of the current player
+            var allPieces = gameState.Board.PiecePositionsFor(gameState.CurrentPlayer);
+            // get a random piece from the list of all pieces
+            var randomPiece = allPieces.ElementAt(new Random().Next(allPieces.Count()));
+            IEnumerable<Move> moves = gameState.LegalMovesForPiece(randomPiece); // empty if square is empty or piece cannot be moved
 
+            if (moves.Any())
+            {
+                CacheMoves(moves);
+
+                // get a random move from moveCache
+                var randomMove = moveCache.ElementAt(new Random().Next(moveCache.Count())).Value;
+                if (randomMove.Type == MoveType.PawnPromotion) // if pawn promotion move
+                {
+                    Move promMove = new PawnPromotion(randomMove.FromPos, randomMove.ToPos, PieceType.Queen);
+                    HandleMove(promMove);
+                }
+                else
+                {
+                    HandleMove(randomMove);
+                }
+            }
+            else
+            {
+                goto HandleAIMove;
+            }
         }
         // end AI
     }
